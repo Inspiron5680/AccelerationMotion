@@ -4,13 +4,13 @@ using UniRx.Triggers;
 
 public class Pitching : MonoBehaviour
 {
-    OVRGrabbable grabbable;
+    Trajectory trajectory;
     bool lastIsGrabbed;
     bool doThrow;
     Vector3 throwVelocity;
     Vector3 throwPosition;
     float elapsedTime;
-    float GRAVITY = 9.81f;
+    readonly float GRAVITY = 9.81f;
 
     void Start()
     {
@@ -22,7 +22,8 @@ public class Pitching : MonoBehaviour
     /// </summary>
     public void Initialize()
     {
-        grabbable = GetComponent<OVRGrabbable>();
+        var grabbable = GetComponent<OVRGrabbable>();
+        trajectory = GetComponent<Trajectory>();
 
         this.UpdateAsObservable()
             .Subscribe(_ =>
@@ -54,6 +55,7 @@ public class Pitching : MonoBehaviour
         var rigidBody = GetComponent<Rigidbody>();
         throwVelocity = rigidBody.velocity;
         throwPosition = gameObject.transform.position;
+        trajectory.Initialize(throwPosition);
         doThrow = true;
     }
 
@@ -63,6 +65,9 @@ public class Pitching : MonoBehaviour
         var coordinateY = throwPosition.y + throwVelocity.y * elapsedTime - GRAVITY * Mathf.Pow(elapsedTime, 2) / 2;
         var coordinateZ = throwPosition.z + throwVelocity.z * elapsedTime;
 
-        gameObject.transform.position = new Vector3(coordinateX, coordinateY, coordinateZ);
+        var position = new Vector3(coordinateX, coordinateY, coordinateZ);
+
+        trajectory.CreateTrajectory(position, elapsedTime);
+        gameObject.transform.position = position;
     }
 }

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 341520945837045996}
   - component: {fileID: 341520945837045987}
   - component: {fileID: 8264424866136875411}
+  - component: {fileID: 1454927861027922502}
   m_Layer: 0
   m_Name: ThrowBall
   m_TagString: Untagged
@@ -139,3 +140,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d1e94a9d44ed2945845c9d75978dd4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1454927861027922502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 341520945837045986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 153e6e492c6c4d24f9969dca9a3481bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trajectoryParent: {fileID: 6382629404737509556, guid: dddda713d45c95c409af4cb7a22cf66f,
+    type: 3}
+  trajectoryBall: {fileID: 1467655939423550467, guid: 91c07f3749500ce4fb7fdc4bce787ebb,
+    type: 3}
