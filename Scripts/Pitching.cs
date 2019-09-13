@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
+using System;
 
 public class Pitching : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class Pitching : MonoBehaviour
     float elapsedTime;
     readonly float GRAVITY = 9.81f;
     [SerializeField] GameObject ball;
-    GameObject lastTrajectoryParent;
+    GameObject trajectoryParent;
 
     void Start()
     {
@@ -69,7 +70,7 @@ public class Pitching : MonoBehaviour
         var rigidBody = GetComponent<Rigidbody>();
         throwVelocity = rigidBody.velocity;
         throwPosition = gameObject.transform.position;
-        lastTrajectoryParent = trajectory.CreateParent(throwPosition);
+        trajectoryParent = trajectory.CreateParent(throwPosition);
         doThrow = true;
     }
 
@@ -89,6 +90,6 @@ public class Pitching : MonoBehaviour
     {
         var instantBall = Instantiate(ball, new Vector3(0.0f, 1.0f, 0.3f), Quaternion.identity);
         instantBall.name = ball.name;
-        instantBall.GetComponent<Trajectory>().LastTrajectoryParent = lastTrajectoryParent;
+        instantBall.GetComponent<Trajectory>().LastTrajectoryData = Tuple.Create(trajectoryParent, throwVelocity);
     }
 }

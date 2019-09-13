@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 
 public class Trajectory : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class Trajectory : MonoBehaviour
     /// <summary>
     /// 前回の投球で生成したTrajectoryParent
     /// </summary>
-    public GameObject LastTrajectoryParent { private get; set; }
+    public Tuple<GameObject, Vector3> LastTrajectoryData { private get; set; }
     
     /// <summary>
     /// TrajectoryParent生成
@@ -45,11 +46,13 @@ public class Trajectory : MonoBehaviour
     /// </summary>
     public void StockTrajectory()
     {
-        if (!LastTrajectoryParent)
+        if (LastTrajectoryData == null)
         {
             return;
         }
-        
-        LastTrajectoryParent.GetComponent<TrajectoryControl>().StockTrajectory();
+
+        var trajectoryControl = LastTrajectoryData.Item1.GetComponent<TrajectoryControl>();
+        trajectoryControl.ThrowVelocity = LastTrajectoryData.Item2;
+        trajectoryControl.StockTrajectory();
     }
 }
