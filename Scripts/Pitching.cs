@@ -11,6 +11,7 @@ public class Pitching : MonoBehaviour
     Vector3 throwPosition;
     float elapsedTime;
     readonly float GRAVITY = 9.81f;
+    [SerializeField] GameObject ball;
 
     void Start()
     {
@@ -47,7 +48,11 @@ public class Pitching : MonoBehaviour
         this.UpdateAsObservable()
             .Where(_ => doThrow)
             .Where(_ => gameObject.transform.position.y < 0)
-            .Subscribe(_ => Destroy(gameObject));
+            .Subscribe(_ =>
+            {
+                respown();
+                Destroy(gameObject);
+            });
     }
 
     void startThrowing()
@@ -69,5 +74,10 @@ public class Pitching : MonoBehaviour
 
         trajectory.CreateTrajectory(position, elapsedTime);
         gameObject.transform.position = position;
+    }
+
+    void respown()
+    {
+        Instantiate(ball, new Vector3(0.0f, 1.0f, 0.3f), Quaternion.identity).name = ball.name;
     }
 }
