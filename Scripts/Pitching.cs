@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
+using System;
 
 public class Pitching : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class Pitching : MonoBehaviour
     Vector3 throwPosition;
     float elapsedTime;
     readonly float GRAVITY = 9.81f;
+    [SerializeField] GameObject ball;
+    GameObject trajectoryParent;
 
     void Start()
     {
@@ -24,6 +27,14 @@ public class Pitching : MonoBehaviour
     {
         var grabbable = GetComponent<OVRGrabbable>();
         trajectory = GetComponent<Trajectory>();
+
+
+        this.UpdateAsObservable()
+            .Where(_ => grabbable.isGrabbed && !lastIsGrabbed)
+            .Subscribe(_ =>
+            {
+                trajectory.StockTrajectory();
+            });
 
         this.UpdateAsObservable()
             .Subscribe(_ =>
@@ -47,7 +58,11 @@ public class Pitching : MonoBehaviour
         this.UpdateAsObservable()
             .Where(_ => doThrow)
             .Where(_ => gameObject.transform.position.y < 0)
-            .Subscribe(_ => Destroy(gameObject));
+            .Subscribe(_ =>
+            {
+                respown();
+                Destroy(gameObject);
+            });
     }
 
     void startThrowing()
@@ -55,7 +70,7 @@ public class Pitching : MonoBehaviour
         var rigidBody = GetComponent<Rigidbody>();
         throwVelocity = rigidBody.velocity;
         throwPosition = gameObject.transform.position;
-        trajectory.Initialize(throwPosition);
+        trajectoryParent = trajectory.CreateParent(throwPosition);
         doThrow = true;
     }
 
@@ -69,5 +84,12 @@ public class Pitching : MonoBehaviour
 
         trajectory.CreateTrajectory(position, elapsedTime);
         gameObject.transform.position = position;
+    }
+
+    void respown()
+    {
+        var instantBall = Instantiate(ball, new Vector3(0.0f, 1.0f, 0.3f), Quaternion.identity);
+        instantBall.name = ball.name;
+        instantBall.GetComponent<Trajectory>().LastTrajectoryData = Tuple.Create(trajectoryParent, throwVelocity);
     }
 }
