@@ -5,11 +5,13 @@ using UnityEngine;
 public class TrajectoryControl : MonoBehaviour
 {
     public Vector3 ThrowVelocity { private get; set; }
+    public static List<GameObject> TrajectoryParents = new List<GameObject>();
 
     public void StockTrajectory()
     {
         alineTrajectory();
         transform.position = new Vector3(-2.0f, 2.0f, 0.0f);
+        TrajectoryParents.Add(gameObject);
     }
 
     void alineTrajectory()
