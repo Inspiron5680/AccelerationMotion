@@ -20,11 +20,11 @@ public class SelectMode : MonoBehaviour
     {
         this.UpdateAsObservable()
             .Where(_ => OVRInput.GetDown(OVRInput.RawButton.RThumbstickUp) || OVRInput.GetDown(OVRInput.RawButton.LThumbstickUp))
-            .Subscribe(_ => selectTrajectory(true));
+            .Subscribe(_ => selectTrajectory(-1));
 
         this.UpdateAsObservable()
             .Where(_ => OVRInput.GetDown(OVRInput.RawButton.RThumbstickDown) || OVRInput.GetDown(OVRInput.RawButton.LThumbstickDown))
-            .Subscribe(_ => selectTrajectory(false));
+            .Subscribe(_ => selectTrajectory(1));
     }
 
     public void ChangeSelectMode()
@@ -57,8 +57,20 @@ public class SelectMode : MonoBehaviour
             .ToArray();
     }
 
-    void selectTrajectory(bool isSelectUp)
+    void selectTrajectory(int shiftIndex)
     {
-        Debug.Log(isSelectUp);
+        TrajectoryControl.TrajectoryParents[curretTrajectoryID].GetComponentsInChildren<MeshRenderer>()
+                .Select(renderer => renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, FADE_VALUE))
+                .ToArray();
+
+        curretTrajectoryID = (curretTrajectoryID + shiftIndex) % TrajectoryControl.TrajectoryParents.Count;
+        if (curretTrajectoryID < 0)
+        {
+            curretTrajectoryID += TrajectoryControl.TrajectoryParents.Count;
+        }
+
+        TrajectoryControl.TrajectoryParents[curretTrajectoryID].GetComponentsInChildren<MeshRenderer>()
+                .Select(renderer => renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, OPAQUE_VALUE))
+                .ToArray();
     }
 }
