@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-public class ChangeSelectMode : MonoBehaviour, ILaserSelectReceiver
+public class SelectMode : MonoBehaviour, ILaserSelectReceiver
 {
     int curretTrajectoryID;
     float FADE_VALUE = 0.3f;
