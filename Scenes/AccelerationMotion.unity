@@ -424,6 +424,7 @@ GameObject:
   - component: {fileID: 1600895060}
   - component: {fileID: 1600895059}
   - component: {fileID: 1600895058}
+  - component: {fileID: 1600895063}
   m_Layer: 5
   m_Name: Quad
   m_TagString: Untagged
@@ -443,6 +444,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 579e0a9752831924eab5c455e2a6ba3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selectMode: {fileID: 1600895063}
 --- !u!64 &1600895059
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -516,3 +518,15 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 66.421005, z: 0}
+--- !u!114 &1600895063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1600895057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fdd9904d5f851f429414635d9c0421d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -1,14 +1,33 @@
 ﻿using System.Linq;
 using UnityEngine;
+using UniRx.Triggers;
+using UniRx;
 
-public class SelectMode : MonoBehaviour, ILaserSelectReceiver
+public class SelectMode : MonoBehaviour
 {
     int curretTrajectoryID;
     float FADE_VALUE = 0.3f;
     float OPAQUE_VALUE = 1.0f;
     public bool IsSelectMode { get; private set; }
 
-    public void LaserSelectReceiver()
+    // Start is called before the first frame update
+    void Start()
+    {
+        Initialize();
+    }
+
+    public void Initialize()
+    {
+        this.UpdateAsObservable()
+            .Where(_ => OVRInput.GetDown(OVRInput.RawButton.RThumbstickUp) || OVRInput.GetDown(OVRInput.RawButton.LThumbstickUp))
+            .Subscribe(_ => selectTrajectory(true));
+
+        this.UpdateAsObservable()
+            .Where(_ => OVRInput.GetDown(OVRInput.RawButton.RThumbstickDown) || OVRInput.GetDown(OVRInput.RawButton.LThumbstickDown))
+            .Subscribe(_ => selectTrajectory(false));
+    }
+
+    public void ChangeSelectMode()
     {
         if (TrajectoryControl.TrajectoryParents.Count == 0)
         {
@@ -36,5 +55,10 @@ public class SelectMode : MonoBehaviour, ILaserSelectReceiver
             .SelectMany(parent => parent.GetComponentsInChildren<MeshRenderer>())
             .Select(renderer => renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, alphaValue))
             .ToArray();
+    }
+
+    void selectTrajectory(bool isSelectUp)
+    {
+        Debug.Log(isSelectUp);
     }
 }
