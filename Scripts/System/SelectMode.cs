@@ -9,7 +9,10 @@ public class SelectMode : MonoBehaviour
     float FADE_VALUE = 0.3f;
     float OPAQUE_VALUE = 1.0f;
     public bool IsSelectMode { get; private set; }
+    float replaySpeed = 3;
     [SerializeField] TrajectoryColor trajectoryColor;
+    [SerializeField] PlaySlowMotionUI playSlowMotionUI;
+    [SerializeField] GameObject replayBall;
 
     // Start is called before the first frame update
     void Start()
@@ -40,11 +43,14 @@ public class SelectMode : MonoBehaviour
         if (IsSelectMode)
         {
             trajectoryColor.ChangeAlpha(OPAQUE_VALUE);
+            playSlowMotionUI.gameObject.SetActive(false);
         }
         else
         {
             trajectoryColor.ChangeAlpha(FADE_VALUE);
             trajectoryColor.ChangeAlpha(OPAQUE_VALUE, 0);
+            curretTrajectoryID = 0;
+            playSlowMotionUI.gameObject.SetActive(true);
         }
 
         IsSelectMode = !IsSelectMode;
@@ -61,5 +67,35 @@ public class SelectMode : MonoBehaviour
         }
 
         trajectoryColor.ChangeAlpha(OPAQUE_VALUE, curretTrajectoryID);
+    }
+
+    public void PlaySlowMotion()
+    {
+        var gravity = 9.81f;
+        var elapsedTime = 0.0f;
+        trajectoryColor.ChangeAlpha(FADE_VALUE, curretTrajectoryID);
+        var replayData = TrajectoryControl.TrajectoryParents[curretTrajectoryID].GetComponent<TrajectoryControl>().GetReplayData();
+
+        var instantReplayBall = Instantiate(replayBall, replayData[1], Quaternion.identity);
+
+        this.UpdateAsObservable()
+            .Subscribe(_ =>
+            {
+                var coordinateX = replayData[1].x + replayData[0].x * elapsedTime;
+                var coordinateY = replayData[1].y + replayData[0].y * elapsedTime - gravity * Mathf.Pow(elapsedTime, 2) / 2;
+                var coordinateZ = replayData[1].z + replayData[0].z * elapsedTime;
+
+                var position = new Vector3(coordinateX, coordinateY, coordinateZ);
+                instantReplayBall.transform.position = position;
+
+                elapsedTime += Time.deltaTime / replaySpeed;
+
+                if (instantReplayBall.transform.position.y < 0.0f)
+                {
+                    trajectoryColor.ChangeAlpha(OPAQUE_VALUE, curretTrajectoryID);
+                    Destroy(instantReplayBall);
+                }
+            })
+            .AddTo(instantReplayBall);
     }
 }
