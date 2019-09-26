@@ -9,6 +9,7 @@ public class SelectMode : MonoBehaviour
     float FADE_VALUE = 0.3f;
     float OPAQUE_VALUE = 1.0f;
     public bool IsSelectMode { get; private set; }
+    [SerializeField] TrajectoryColor trajectoryColor;
 
     // Start is called before the first frame update
     void Start()
@@ -36,32 +37,20 @@ public class SelectMode : MonoBehaviour
 
         if (IsSelectMode)
         {
-            changeAlpha(OPAQUE_VALUE);
+            trajectoryColor.ChangeAlpha(OPAQUE_VALUE);
         }
         else
         {
-            changeAlpha(FADE_VALUE);
-            TrajectoryControl.TrajectoryParents[0].GetComponentsInChildren<MeshRenderer>()
-                .Select(renderer => renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, OPAQUE_VALUE))
-                .ToArray();
+            trajectoryColor.ChangeAlpha(FADE_VALUE);
+            trajectoryColor.ChangeAlpha(OPAQUE_VALUE, 0);
         }
 
         IsSelectMode = !IsSelectMode;
     }
 
-    void changeAlpha(float alphaValue)
-    {
-        TrajectoryControl.TrajectoryParents
-            .SelectMany(parent => parent.GetComponentsInChildren<MeshRenderer>())
-            .Select(renderer => renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, alphaValue))
-            .ToArray();
-    }
-
     void selectTrajectory(int shiftIndex)
     {
-        TrajectoryControl.TrajectoryParents[curretTrajectoryID].GetComponentsInChildren<MeshRenderer>()
-                .Select(renderer => renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, FADE_VALUE))
-                .ToArray();
+        trajectoryColor.ChangeAlpha(FADE_VALUE, curretTrajectoryID);
 
         curretTrajectoryID = (curretTrajectoryID + shiftIndex) % TrajectoryControl.TrajectoryParents.Count;
         if (curretTrajectoryID < 0)
@@ -69,8 +58,6 @@ public class SelectMode : MonoBehaviour
             curretTrajectoryID += TrajectoryControl.TrajectoryParents.Count;
         }
 
-        TrajectoryControl.TrajectoryParents[curretTrajectoryID].GetComponentsInChildren<MeshRenderer>()
-                .Select(renderer => renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, OPAQUE_VALUE))
-                .ToArray();
+        trajectoryColor.ChangeAlpha(OPAQUE_VALUE, curretTrajectoryID);
     }
 }
