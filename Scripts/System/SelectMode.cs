@@ -49,6 +49,7 @@ public class SelectMode : MonoBehaviour
         {
             trajectoryColor.ChangeAlpha(FADE_VALUE);
             trajectoryColor.ChangeAlpha(OPAQUE_VALUE, 0);
+            curretTrajectoryID = 0;
             playSlowMotionUI.gameObject.SetActive(true);
         }
 
