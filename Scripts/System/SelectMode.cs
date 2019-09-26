@@ -10,6 +10,7 @@ public class SelectMode : MonoBehaviour
     float OPAQUE_VALUE = 1.0f;
     public bool IsSelectMode { get; private set; }
     [SerializeField] TrajectoryColor trajectoryColor;
+    [SerializeField] PlaySlowMotionUI playSlowMotionUI;
 
     // Start is called before the first frame update
     void Start()
@@ -38,11 +39,13 @@ public class SelectMode : MonoBehaviour
         if (IsSelectMode)
         {
             trajectoryColor.ChangeAlpha(OPAQUE_VALUE);
+            playSlowMotionUI.gameObject.SetActive(false);
         }
         else
         {
             trajectoryColor.ChangeAlpha(FADE_VALUE);
             trajectoryColor.ChangeAlpha(OPAQUE_VALUE, 0);
+            playSlowMotionUI.gameObject.SetActive(true);
         }
 
         IsSelectMode = !IsSelectMode;
