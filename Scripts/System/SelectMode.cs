@@ -20,10 +20,12 @@ public class SelectMode : MonoBehaviour
     public void Initialize()
     {
         this.UpdateAsObservable()
+            .Where(_ => IsSelectMode)
             .Where(_ => OVRInput.GetDown(OVRInput.RawButton.RThumbstickUp) || OVRInput.GetDown(OVRInput.RawButton.LThumbstickUp))
             .Subscribe(_ => selectTrajectory(-1));
 
         this.UpdateAsObservable()
+            .Where(_ => IsSelectMode)
             .Where(_ => OVRInput.GetDown(OVRInput.RawButton.RThumbstickDown) || OVRInput.GetDown(OVRInput.RawButton.LThumbstickDown))
             .Subscribe(_ => selectTrajectory(1));
     }
