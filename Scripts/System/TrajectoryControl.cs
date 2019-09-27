@@ -9,7 +9,6 @@ public class TrajectoryControl : MonoBehaviour
     Vector3 throwPosition = new Vector3(-2.0f, 2.0f, 0.0f);
     public static List<GameObject> TrajectoryParents = new List<GameObject>();
     static GameObject turnAxis;
-    float turnSpeed = 5;
 
     void Start()
     {
@@ -28,14 +27,14 @@ public class TrajectoryControl : MonoBehaviour
             .Subscribe(_ =>
             {
                 var stickAxis = OVRInput.Get(OVRInput.RawAxis2D.LThumbstick);
-                turnAxis.transform.Rotate(0, stickAxis.x * turnSpeed, 0);
+                turnAxis.transform.Rotate(0, Mathf.Round(stickAxis.x), 0);
             });
 
         turnAxis.UpdateAsObservable()
             .Subscribe(_ =>
             {
                 var stickAxis = OVRInput.Get(OVRInput.RawAxis2D.RThumbstick);
-                turnAxis.transform.Rotate(0, stickAxis.x * turnSpeed, 0);
+                turnAxis.transform.Rotate(0, Mathf.Round(stickAxis.x), 0);
             });
     }
 
