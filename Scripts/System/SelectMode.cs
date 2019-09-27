@@ -74,19 +74,20 @@ public class SelectMode : MonoBehaviour
         var gravity = 9.81f;
         var elapsedTime = 0.0f;
         trajectoryColor.ChangeAlpha(FADE_VALUE, curretTrajectoryID);
-        var replayData = TrajectoryControl.TrajectoryParents[curretTrajectoryID].GetComponent<TrajectoryControl>().GetReplayData();
+        var replayVelocity = TrajectoryControl.TrajectoryParents[curretTrajectoryID].GetComponent<TrajectoryControl>().ThrowVelocity;
 
-        var instantReplayBall = Instantiate(replayBall, replayData[1], Quaternion.identity);
+        var instantReplayBall = Instantiate(replayBall, TrajectoryControl.TrajectoryParents[curretTrajectoryID].transform.position, TrajectoryControl.TrajectoryParents[curretTrajectoryID].transform.rotation);
+        instantReplayBall.transform.parent = TrajectoryControl.TrajectoryParents[curretTrajectoryID].transform;
 
-        this.UpdateAsObservable()
+        instantReplayBall.UpdateAsObservable()
             .Subscribe(_ =>
             {
-                var coordinateX = replayData[1].x + replayData[0].x * elapsedTime;
-                var coordinateY = replayData[1].y + replayData[0].y * elapsedTime - gravity * Mathf.Pow(elapsedTime, 2) / 2;
-                var coordinateZ = replayData[1].z + replayData[0].z * elapsedTime;
+                var coordinateX = replayVelocity.x * elapsedTime;
+                var coordinateY = replayVelocity.y * elapsedTime - gravity * Mathf.Pow(elapsedTime, 2) / 2;
+                var coordinateZ = replayVelocity.z * elapsedTime;
 
                 var position = new Vector3(coordinateX, coordinateY, coordinateZ);
-                instantReplayBall.transform.position = position;
+                instantReplayBall.transform.localPosition = position;
 
                 elapsedTime += Time.deltaTime / replaySpeed;
 
@@ -95,7 +96,6 @@ public class SelectMode : MonoBehaviour
                     trajectoryColor.ChangeAlpha(OPAQUE_VALUE, curretTrajectoryID);
                     Destroy(instantReplayBall);
                 }
-            })
-            .AddTo(instantReplayBall);
+            });
     }
 }
