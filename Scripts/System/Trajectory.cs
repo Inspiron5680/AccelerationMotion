@@ -20,7 +20,6 @@ public class Trajectory : MonoBehaviour
     public GameObject CreateParent(Vector3 throwPosition)
     {
         instantTrajectoryParent = Instantiate(trajectoryParent, throwPosition, Quaternion.identity);
-        instantTrajectoryParent.AddComponent(typeof(TrajectoryControl));
         return instantTrajectoryParent;
     }
 

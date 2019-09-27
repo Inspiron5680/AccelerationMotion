@@ -1,17 +1,49 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using UniRx.Triggers;
+using UniRx;
 
 public class TrajectoryControl : MonoBehaviour
 {
     public Vector3 ThrowVelocity { private get; set; }
     Vector3 throwPosition = new Vector3(-2.0f, 2.0f, 0.0f);
     public static List<GameObject> TrajectoryParents = new List<GameObject>();
+    static GameObject turnAxis;
+    float turnSpeed = 5;
+
+    void Start()
+    {
+        Initialize();
+    }
+
+    public void Initialize()
+    {
+        if (turnAxis != null)
+        {
+            return;
+        }
+
+        turnAxis = GameObject.Find("TurnAxis");
+        turnAxis.UpdateAsObservable()
+            .Subscribe(_ =>
+            {
+                var stickAxis = OVRInput.Get(OVRInput.RawAxis2D.LThumbstick);
+                turnAxis.transform.Rotate(0, stickAxis.x * turnSpeed, 0);
+            });
+
+        turnAxis.UpdateAsObservable()
+            .Subscribe(_ =>
+            {
+                var stickAxis = OVRInput.Get(OVRInput.RawAxis2D.RThumbstick);
+                turnAxis.transform.Rotate(0, stickAxis.x * turnSpeed, 0);
+            });
+    }
 
     public void StockTrajectory()
     {
         alineTrajectory();
         transform.position = throwPosition;
+        transform.parent = turnAxis.transform;
         TrajectoryParents.Add(gameObject);
     }
 
