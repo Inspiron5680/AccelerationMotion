@@ -53,5 +53,7 @@ public class Trajectory : MonoBehaviour
         var trajectoryControl = LastTrajectoryData.Item1.GetComponent<TrajectoryControl>();
         trajectoryControl.ThrowVelocity = LastTrajectoryData.Item2;
         trajectoryControl.StockTrajectory();
+
+        LastTrajectoryData = null;
     }
 }

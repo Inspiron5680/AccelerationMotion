@@ -91,5 +91,7 @@ public class Pitching : MonoBehaviour
         var instantBall = Instantiate(ball, new Vector3(0.0f, 1.0f, 0.3f), Quaternion.identity);
         instantBall.name = ball.name;
         instantBall.GetComponent<Trajectory>().LastTrajectoryData = Tuple.Create(trajectoryParent, throwVelocity);
+
+        StockTrajectoryUI.Trajectory = instantBall.GetComponent<Trajectory>();
     }
 }
