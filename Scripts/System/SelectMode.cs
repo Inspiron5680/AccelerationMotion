@@ -9,7 +9,9 @@ public class SelectMode : MonoBehaviour
     float FADE_VALUE = 0.3f;
     float OPAQUE_VALUE = 1.0f;
     public bool IsSelectMode { get; private set; }
-    float replaySpeed = 3;
+    int replaySpeed;
+    int ADJUST_VALUE_MAX = 5;
+    int ADJUST_VALUE_MIN = 1;
     [SerializeField] TrajectoryColor trajectoryColor;
     [SerializeField] PlaySlowMotionUI playSlowMotionUI;
     [SerializeField] GameObject replayBall;
@@ -31,6 +33,9 @@ public class SelectMode : MonoBehaviour
             .Where(_ => IsSelectMode)
             .Where(_ => OVRInput.GetDown(OVRInput.RawButton.RThumbstickDown) || OVRInput.GetDown(OVRInput.RawButton.LThumbstickDown))
             .Subscribe(_ => selectTrajectory(1));
+
+        playSlowMotionUI.gameObject.SetActive(false);
+        replaySpeed = 3;
     }
 
     public void ChangeSelectMode()
@@ -97,5 +102,20 @@ public class SelectMode : MonoBehaviour
                     Destroy(instantReplayBall);
                 }
             });
+    }
+
+    public void AdjustReplaySpeed(int adjustValue)
+    {
+        replaySpeed += adjustValue;
+
+        if (replaySpeed < ADJUST_VALUE_MIN)
+        {
+            replaySpeed = ADJUST_VALUE_MIN;
+        }
+
+        if (replaySpeed > ADJUST_VALUE_MAX)
+        {
+            replaySpeed = ADJUST_VALUE_MAX;
+        }
     }
 }

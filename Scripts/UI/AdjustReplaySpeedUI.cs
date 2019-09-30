@@ -1,0 +1,25 @@
+﻿using UnityEngine;
+
+public class AdjustReplaySpeedUI : MonoBehaviour, ILaserSelectReceiver
+{
+    enum AdjustDirection
+    {
+        Up, Down
+    }
+
+    [SerializeField] AdjustDirection adjustDirection;
+    [SerializeField] SelectMode selectMode;
+
+    public void LaserSelectReceiver()
+    {
+        switch (adjustDirection)
+        {
+            case AdjustDirection.Up:
+                selectMode.AdjustReplaySpeed(-1);
+                break;
+            case AdjustDirection.Down:
+                selectMode.AdjustReplaySpeed(1);
+                break;
+        }
+    }
+}
