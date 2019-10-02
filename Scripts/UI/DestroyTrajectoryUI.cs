@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DestroyTrajectoryUI : MonoBehaviour, ILaserSelectReceiver
+public class DestroyTrajectoryUI : MonoBehaviour, VRUI
 {
-    public void LaserSelectReceiver()
+    public void Receiver()
     {
         foreach(GameObject parent in TrajectoryControl.TrajectoryParents)
         {

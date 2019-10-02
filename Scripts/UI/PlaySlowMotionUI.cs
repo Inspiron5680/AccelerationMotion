@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 
-public class PlaySlowMotionUI : MonoBehaviour, ILaserSelectReceiver
+public class PlaySlowMotionUI : MonoBehaviour, VRUI
 {
     [SerializeField] SelectMode selectMode;
 
-    public void LaserSelectReceiver()
+    public void Receiver()
     {
         selectMode.PlaySlowMotion();
     }
