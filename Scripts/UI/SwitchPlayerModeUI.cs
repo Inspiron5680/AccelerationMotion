@@ -2,12 +2,11 @@
 
 public class SwitchPlayerModeUI : MonoBehaviour, VRUI
 {
-    enum PlayerMode
+    public enum PlayerMode
     {
         Pitching, Observe
     }
-
-    PlayerMode currentMode;
+    public PlayerMode CurrentMode { get; private set; }
 
     [SerializeField] GameObject pitchingUI;
     [SerializeField] GameObject observeUI;
@@ -21,22 +20,27 @@ public class SwitchPlayerModeUI : MonoBehaviour, VRUI
     {
         pitchingUI.SetActive(true);
         observeUI.SetActive(false);
-        currentMode = PlayerMode.Pitching;
+        CurrentMode = PlayerMode.Pitching;
     }
 
     public void Receiver()
     {
-        switch (currentMode)
+        ChangePlayerMode();
+    }
+
+    public void ChangePlayerMode()
+    {
+        switch (CurrentMode)
         {
             case PlayerMode.Pitching:
                 pitchingUI.SetActive(false);
                 observeUI.SetActive(true);
-                currentMode = PlayerMode.Observe;
+                CurrentMode = PlayerMode.Observe;
                 break;
             case PlayerMode.Observe:
                 pitchingUI.SetActive(true);
                 observeUI.SetActive(false);
-                currentMode = PlayerMode.Pitching;
+                CurrentMode = PlayerMode.Pitching;
                 break;
         }
     }
