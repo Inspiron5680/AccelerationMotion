@@ -618,6 +618,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pitchingUI: {fileID: 1858963369}
   observeUI: {fileID: 1660143812}
+  selectMode: {fileID: 1600895063}
 --- !u!64 &1144078612
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -689,7 +690,7 @@ Transform:
   m_LocalScale: {x: 0.10000001, y: 0.2, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1285749995
 PrefabInstance:
@@ -1142,7 +1143,7 @@ Transform:
   - {fileID: 1600895062}
   - {fileID: 653045293}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1858963369
 GameObject:

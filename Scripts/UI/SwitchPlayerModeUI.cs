@@ -10,6 +10,7 @@ public class SwitchPlayerModeUI : MonoBehaviour, VRUI
 
     [SerializeField] GameObject pitchingUI;
     [SerializeField] GameObject observeUI;
+    [SerializeField] SelectMode selectMode;
 
     void Start()
     {
@@ -38,6 +39,12 @@ public class SwitchPlayerModeUI : MonoBehaviour, VRUI
                 CurrentMode = PlayerMode.Observe;
                 break;
             case PlayerMode.Observe:
+
+                if (selectMode.IsSelectMode)
+                {
+                    selectMode.ChangeSelectMode();
+                }
+
                 pitchingUI.SetActive(true);
                 observeUI.SetActive(false);
                 CurrentMode = PlayerMode.Pitching;
