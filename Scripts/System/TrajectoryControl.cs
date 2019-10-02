@@ -38,6 +38,11 @@ public class TrajectoryControl : MonoBehaviour
             });
     }
 
+    public static void ResetTurnAxis()
+    {
+        turnAxis.transform.rotation = Quaternion.identity;
+    }
+
     public void StockTrajectory()
     {
         alineTrajectory();

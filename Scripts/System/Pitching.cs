@@ -14,6 +14,7 @@ public class Pitching : MonoBehaviour
     readonly float GRAVITY = 9.81f;
     [SerializeField] GameObject ball;
     GameObject trajectoryParent;
+    SwitchPlayerModeUI switchPlayerMode;
 
     void Start()
     {
@@ -27,12 +28,17 @@ public class Pitching : MonoBehaviour
     {
         var grabbable = GetComponent<OVRGrabbable>();
         trajectory = GetComponent<Trajectory>();
+        switchPlayerMode = GameObject.Find("Quad").GetComponent<SwitchPlayerModeUI>();
 
 
         this.UpdateAsObservable()
             .Where(_ => grabbable.isGrabbed && !lastIsGrabbed)
             .Subscribe(_ =>
             {
+                if (switchPlayerMode.CurrentMode == SwitchPlayerModeUI.PlayerMode.Observe)
+                {
+                    switchPlayerMode.ChangePlayerMode();
+                }
                 trajectory.StockTrajectory();
             });
 
