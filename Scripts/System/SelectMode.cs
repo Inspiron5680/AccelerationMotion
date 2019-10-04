@@ -8,12 +8,11 @@ public class SelectMode : MonoBehaviour
     int curretTrajectoryID;
     float FADE_VALUE = 0.3f;
     float OPAQUE_VALUE = 1.0f;
-    public bool IsSelectMode { get; private set; }
+    bool isSelectMode;
     int replaySpeed;
     int ADJUST_VALUE_MAX = 5;
     int ADJUST_VALUE_MIN = 1;
     [SerializeField] TrajectoryColor trajectoryColor;
-    [SerializeField] PlaySlowMotionUI playSlowMotionUI;
     [SerializeField] GameObject replayBall;
 
     // Start is called before the first frame update
@@ -25,16 +24,15 @@ public class SelectMode : MonoBehaviour
     public void Initialize()
     {
         this.UpdateAsObservable()
-            .Where(_ => IsSelectMode)
+            .Where(_ => isSelectMode)
             .Where(_ => OVRInput.GetDown(OVRInput.RawButton.RThumbstickUp) || OVRInput.GetDown(OVRInput.RawButton.LThumbstickUp))
             .Subscribe(_ => selectTrajectory(-1));
 
         this.UpdateAsObservable()
-            .Where(_ => IsSelectMode)
+            .Where(_ => isSelectMode)
             .Where(_ => OVRInput.GetDown(OVRInput.RawButton.RThumbstickDown) || OVRInput.GetDown(OVRInput.RawButton.LThumbstickDown))
             .Subscribe(_ => selectTrajectory(1));
 
-        playSlowMotionUI.gameObject.SetActive(false);
         replaySpeed = 3;
     }
 
@@ -45,20 +43,18 @@ public class SelectMode : MonoBehaviour
             return;
         }
 
-        if (IsSelectMode)
+        if (isSelectMode)
         {
             trajectoryColor.ChangeAlpha(OPAQUE_VALUE);
-            playSlowMotionUI.gameObject.SetActive(false);
         }
         else
         {
             trajectoryColor.ChangeAlpha(FADE_VALUE);
             trajectoryColor.ChangeAlpha(OPAQUE_VALUE, 0);
             curretTrajectoryID = 0;
-            playSlowMotionUI.gameObject.SetActive(true);
         }
 
-        IsSelectMode = !IsSelectMode;
+        isSelectMode = !isSelectMode;
     }
 
     void selectTrajectory(int shiftIndex)

@@ -35,7 +35,7 @@ public class Pitching : MonoBehaviour
             .Where(_ => grabbable.isGrabbed && !lastIsGrabbed)
             .Subscribe(_ =>
             {
-                if (switchPlayerMode.CurrentMode == SwitchPlayerModeUI.PlayerMode.Observe)
+                if (switchPlayerMode.CurrentMode == SwitchPlayerModeUI.PlayerMode.Select)
                 {
                     switchPlayerMode.ChangePlayerMode();
                 }
