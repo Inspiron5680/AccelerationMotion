@@ -4,13 +4,12 @@ public class SwitchPlayerModeUI : MonoBehaviour, VRUI
 {
     public enum PlayerMode
     {
-        Pitching, Observe
+        Pitching, Select
     }
     public PlayerMode CurrentMode { get; private set; }
 
     [SerializeField] GameObject pitchingUI;
-    [SerializeField] GameObject observeUI;
-    [SerializeField] SelectMode selectMode;
+    [SerializeField] GameObject selectUI;
 
     void Start()
     {
@@ -20,7 +19,7 @@ public class SwitchPlayerModeUI : MonoBehaviour, VRUI
     void Initialize()
     {
         pitchingUI.SetActive(true);
-        observeUI.SetActive(false);
+        selectUI.SetActive(false);
         CurrentMode = PlayerMode.Pitching;
     }
 
@@ -35,19 +34,14 @@ public class SwitchPlayerModeUI : MonoBehaviour, VRUI
         {
             case PlayerMode.Pitching:
                 pitchingUI.SetActive(false);
-                observeUI.SetActive(true);
-                CurrentMode = PlayerMode.Observe;
+                selectUI.SetActive(true);
+                selectUI.GetComponent<SelectMode>().ChangeSelectMode();
+                CurrentMode = PlayerMode.Select;
                 break;
-            case PlayerMode.Observe:
-
-                if (selectMode.IsSelectMode)
-                {
-                    selectMode.ChangeSelectMode();
-                }
-
+            case PlayerMode.Select:
                 TrajectoryControl.ResetTurnAxis();
                 pitchingUI.SetActive(true);
-                observeUI.SetActive(false);
+                selectUI.SetActive(false);
                 CurrentMode = PlayerMode.Pitching;
                 break;
         }
