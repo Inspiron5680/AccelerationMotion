@@ -40,6 +40,10 @@ public class TrajectoryControl : MonoBehaviour
 
     public static void ResetTurnAxis()
     {
+        if (turnAxis == null)
+        {
+            return;
+        }
         turnAxis.transform.rotation = Quaternion.identity;
     }
 

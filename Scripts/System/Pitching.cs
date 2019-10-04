@@ -28,7 +28,7 @@ public class Pitching : MonoBehaviour
     {
         var grabbable = GetComponent<OVRGrabbable>();
         trajectory = GetComponent<Trajectory>();
-        switchPlayerMode = GameObject.Find("Quad").GetComponent<SwitchPlayerModeUI>();
+        switchPlayerMode = GameObject.Find("PlayerModeSwitcherUI").GetComponent<SwitchPlayerModeUI>();
 
 
         this.UpdateAsObservable()
