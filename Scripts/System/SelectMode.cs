@@ -83,6 +83,7 @@ public class SelectMode : MonoBehaviour
 
         var instantReplayBall = Instantiate(replayBall, TrajectoryControl.TrajectoryParents[curretTrajectoryID].transform.position, TrajectoryControl.TrajectoryParents[curretTrajectoryID].transform.rotation);
         instantReplayBall.transform.parent = TrajectoryControl.TrajectoryParents[curretTrajectoryID].transform;
+        instantReplayBall.tag = "Untagged";
 
         instantReplayBall.UpdateAsObservable()
             .Subscribe(_ =>

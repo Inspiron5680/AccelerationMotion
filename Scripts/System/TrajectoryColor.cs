@@ -6,8 +6,9 @@ public class TrajectoryColor : MonoBehaviour
     public void ChangeAlpha(float alphaValue,int index)
     {
         TrajectoryControl.TrajectoryParents[index].GetComponentsInChildren<MeshRenderer>()
-                .Select(renderer => renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, alphaValue))
-                .ToArray();
+            .Where(renderer => renderer.gameObject.tag == "Trajectory")
+            .Select(renderer => renderer.material.color = new Color(renderer.material.color.r, renderer.material.color.g, renderer.material.color.b, alphaValue))
+            .ToArray();
     }
 
     public void ChangeAlpha(float alphaValue)
