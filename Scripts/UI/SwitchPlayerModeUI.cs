@@ -37,6 +37,7 @@ public class SwitchPlayerModeUI : MonoBehaviour, VRUI
                 TrajectoryControl.ResetTurnAxis();
                 pitchingUI.SetActive(true);
                 selectUI.SetActive(false);
+                selectUI.GetComponent<SelectMode>().ChangeSelectMode();
                 CurrentMode = PlayerMode.Pitching;
                 break;
         }
