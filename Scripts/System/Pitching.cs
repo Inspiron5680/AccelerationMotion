@@ -31,6 +31,7 @@ public class Pitching : MonoBehaviour
         switchPlayerMode = GameObject.Find("PlayerModeSwitcherUI").GetComponent<SwitchPlayerModeUI>();
 
 
+        //NOTE:ボールをつかんだ瞬間ストックを行うストリーム
         this.UpdateAsObservable()
             .Where(_ => grabbable.isGrabbed && !lastIsGrabbed)
             .Subscribe(_ =>
@@ -39,9 +40,12 @@ public class Pitching : MonoBehaviour
                 {
                     switchPlayerMode.ChangePlayerMode();
                 }
+
+                gameObject.transform.parent = null;
                 trajectory.StockTrajectory();
             });
 
+        //NOTE:投げられたことを検知して軌跡の生成を始めるストリーム
         this.UpdateAsObservable()
             .Subscribe(_ =>
             {
@@ -53,6 +57,7 @@ public class Pitching : MonoBehaviour
                 lastIsGrabbed = grabbable.isGrabbed;
             });
 
+        //NOTE:軌跡生成ストリーム
         this.UpdateAsObservable()
             .Where(_ => doThrow)
             .Subscribe(_ => 
@@ -61,6 +66,7 @@ public class Pitching : MonoBehaviour
                 elapsedTime += Time.deltaTime;
             });
 
+        //NOTE:投げられたボールを削除してリスポンさせるストリーム
         this.UpdateAsObservable()
             .Where(_ => doThrow)
             .Where(_ => gameObject.transform.position.y < 0)
@@ -94,10 +100,16 @@ public class Pitching : MonoBehaviour
 
     void respown()
     {
-        var instantBall = Instantiate(ball, new Vector3(0.0f, 1.0f, 0.3f), Quaternion.identity);
+        var instantBall = Instantiate(ball, Vector3.zero, Quaternion.identity);
         instantBall.name = ball.name;
-        instantBall.GetComponent<Trajectory>().LastTrajectoryData = Tuple.Create(trajectoryParent, throwVelocity);
+        var trajectoryComponent = instantBall.GetComponent<Trajectory>();
+        trajectoryComponent.LastTrajectoryData = Tuple.Create(trajectoryParent, throwVelocity);
 
-        StockTrajectoryUI.Trajectory = instantBall.GetComponent<Trajectory>();
+        StockTrajectoryUI.Trajectory = trajectoryComponent;
+
+        var objectUI = FindObjectOfType<ObjectUI>();
+        Debug.Log($"test{objectUI.name}");
+        instantBall.transform.parent = objectUI.transform;
+        instantBall.transform.localPosition = new Vector3(0, 0.4f, -0.1f);
     }
 }
