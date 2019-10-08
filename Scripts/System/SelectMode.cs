@@ -15,12 +15,6 @@ public class SelectMode : MonoBehaviour
     [SerializeField] TrajectoryColor trajectoryColor;
     [SerializeField] GameObject replayBall;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        Initialize();
-    }
-
     public void Initialize()
     {
         this.UpdateAsObservable()

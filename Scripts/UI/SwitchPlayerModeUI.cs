@@ -11,12 +11,7 @@ public class SwitchPlayerModeUI : MonoBehaviour, VRUI
     [SerializeField] GameObject pitchingUI;
     [SerializeField] GameObject selectUI;
 
-    void Start()
-    {
-        Initialize();
-    }
-
-    void Initialize()
+    public void Initialize()
     {
         pitchingUI.SetActive(true);
         selectUI.SetActive(false);
@@ -42,6 +37,7 @@ public class SwitchPlayerModeUI : MonoBehaviour, VRUI
                 TrajectoryControl.ResetTurnAxis();
                 pitchingUI.SetActive(true);
                 selectUI.SetActive(false);
+                selectUI.GetComponent<SelectMode>().ChangeSelectMode();
                 CurrentMode = PlayerMode.Pitching;
                 break;
         }
