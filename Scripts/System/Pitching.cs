@@ -108,7 +108,6 @@ public class Pitching : MonoBehaviour
         StockTrajectoryUI.Trajectory = trajectoryComponent;
 
         var objectUI = FindObjectOfType<ObjectUI>();
-        Debug.Log($"test{objectUI.name}");
         instantBall.transform.parent = objectUI.transform;
         instantBall.transform.localPosition = new Vector3(0, 0.4f, -0.1f);
     }

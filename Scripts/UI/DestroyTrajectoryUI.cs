@@ -6,6 +6,11 @@ public class DestroyTrajectoryUI : MonoBehaviour, VRUI
 {
     public void Receiver()
     {
+        if (TrajectoryControl.TrajectoryParents.Count == 0)
+        {
+            return;
+        }
+
         foreach(GameObject parent in TrajectoryControl.TrajectoryParents)
         {
             Destroy(parent);
