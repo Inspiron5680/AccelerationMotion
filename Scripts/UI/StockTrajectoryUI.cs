@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class StockTrajectoryUI : MonoBehaviour, VRUI
 {
@@ -14,5 +12,6 @@ public class StockTrajectoryUI : MonoBehaviour, VRUI
         }
 
         Trajectory.StockTrajectory();
+        Destroy(transform.parent.gameObject);
     }
 }

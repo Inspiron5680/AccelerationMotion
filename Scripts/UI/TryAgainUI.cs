@@ -18,5 +18,7 @@ public class TryAgainUI : MonoBehaviour, VRUI
         {
             Destroy(lastThrowTrajetory.transform.gameObject);
         }
+
+        Destroy(transform.parent.gameObject);
     }
 }

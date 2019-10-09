@@ -15,6 +15,7 @@ public class Pitching : MonoBehaviour
     [SerializeField] GameObject ball;
     GameObject trajectoryParent;
     SwitchPlayerModeUI switchPlayerMode;
+    [SerializeField] GameObject separator;
 
     void Start()
     {
@@ -110,5 +111,16 @@ public class Pitching : MonoBehaviour
         var objectUI = FindObjectOfType<ObjectUI>();
         instantBall.transform.parent = objectUI.transform;
         instantBall.transform.localPosition = new Vector3(0, 0.4f, -0.1f);
+
+        showSeparator();
+    }
+
+    void showSeparator()
+    {
+        var separatorUI = Instantiate(separator, Vector3.zero, Quaternion.identity);
+        var centerEyeAnchor = FindObjectOfType<AudioListener>();
+        separatorUI.transform.parent = centerEyeAnchor.transform;
+        separatorUI.transform.localPosition = new Vector3(0, 0, 0.8f);
+        separatorUI.transform.parent = null;
     }
 }

@@ -141,6 +141,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ball: {fileID: 341520945837045986}
+  separator: {fileID: 8069819301057683476, guid: bfb20a34b6f4d654dae08bfc6406e48f,
+    type: 3}
 --- !u!114 &1454927861027922502
 MonoBehaviour:
   m_ObjectHideFlags: 0
