@@ -8,6 +8,11 @@ public class PlaySlowMotionUI : MonoBehaviour, VRUI
 
     public void Receiver()
     {
+        if (TrajectoryControl.TrajectoryParents.Count == 0)
+        {
+            return;
+        }
+
         blazeThrow();
     }
 
