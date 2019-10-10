@@ -6,7 +6,7 @@ using UniRx;
 public class SelectMode : MonoBehaviour
 {
     int curretTrajectoryID;
-    float FADE_VALUE = 0.3f;
+    float FADE_VALUE = 0.1f;
     float OPAQUE_VALUE = 1.0f;
     bool isSelectMode;
     int replaySpeed;
