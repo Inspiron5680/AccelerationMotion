@@ -41,6 +41,7 @@ public class Pitching : MonoBehaviour
                     switchPlayerMode.ChangePlayerMode();
                 }
 
+                TrajectoryControl.ResetTurnAxis();
                 gameObject.transform.parent = null;
                 trajectory.Retry();
             });
