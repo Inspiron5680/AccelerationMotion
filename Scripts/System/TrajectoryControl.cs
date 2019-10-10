@@ -49,6 +49,7 @@ public class TrajectoryControl : MonoBehaviour
 
     public void StockTrajectory()
     {
+        ResetTurnAxis();
         alineTrajectory();
         transform.position = throwPosition;
         transform.parent = turnAxis.transform;
