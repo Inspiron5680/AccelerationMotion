@@ -42,7 +42,7 @@ public class Pitching : MonoBehaviour
                 }
 
                 gameObject.transform.parent = null;
-                trajectory.StockTrajectory();
+                trajectory.Retry();
             });
 
         //NOTE:投げられたことを検知して軌跡の生成を始めるストリーム

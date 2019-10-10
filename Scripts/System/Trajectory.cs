@@ -61,4 +61,19 @@ public class Trajectory : MonoBehaviour
 
         LastTrajectoryData = null;
     }
+
+    public void Retry()
+    {
+        if (LastTrajectoryData == null)
+        {
+            return;
+        }
+
+        if (LastTrajectoryData.Item1 == null)
+        {
+            return;
+        }
+
+        Destroy(LastTrajectoryData.Item1);
+    }
 }
