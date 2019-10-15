@@ -121,18 +121,18 @@ public class SelectMode : MonoBehaviour
 
         if (!trajectoryBalls[0].GetComponent<LineRenderer>())
         {
+            var triPoints = getTriPoints();
             trajectoryBalls
-                .Select(transform => Tuple.Create(transform.gameObject, setLineData(transform.gameObject.AddComponent<LineRenderer>()), transform, new SingleAssignmentDisposable()))
-                .Select(data => data.Item4.Disposable = data.Item1.UpdateAsObservable()
+                .Select(transform => Tuple.Create(transform.gameObject, setLineData(transform.gameObject.AddComponent<LineRenderer>()), new SingleAssignmentDisposable()))
+                .Select(data => data.Item3.Disposable = data.Item1.UpdateAsObservable()
                     .Subscribe(_ =>
                     {
-                        data.Item2.enabled = true;
-                        data.Item2.SetPosition(0, data.Item3.position);
-                        data.Item2.SetPosition(1, new Vector3(data.Item3.position.x, 0, data.Item3.position.z));
+                        writeLine(data, triPoints[1]);
 
                         if (!isRuledLineEnable || !isSelectMode)
                         {
-                            data.Item4.Dispose();
+                            isRuledLineEnable = false;
+                            data.Item3.Dispose();
                             deleteLine();
                         }
                     }))
@@ -158,6 +158,29 @@ public class SelectMode : MonoBehaviour
             {
                 Destroy(ball.GetComponent<LineRenderer>());
             }
+        }
+
+        Transform[] getTriPoints()
+        {
+            var startPoint = trajectoryBalls[0];
+            var middlePoint = trajectoryBalls
+                .OrderByDescending(transform => transform.position.y)
+                .First();
+            var endPoint = trajectoryBalls[trajectoryBalls.Length - 1];
+
+            return new Transform[] { startPoint, middlePoint, endPoint };
+        }
+
+        void writeLine(Tuple<GameObject,LineRenderer,SingleAssignmentDisposable> data,Transform end)
+        {
+            data.Item2.enabled = true;
+            data.Item2.positionCount = 3;
+
+            var positions = new Vector3[] {new Vector3(data.Item1.transform.position.x, 0, data.Item1.transform.position.z)
+                ,data.Item1.transform.position
+                ,new Vector3(end.position.x, data.Item1.transform.position.y, end.position.z)};
+
+            data.Item2.SetPositions(positions);
         }
     }
 }
