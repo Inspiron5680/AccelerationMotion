@@ -128,7 +128,7 @@ public class SelectMode : MonoBehaviour
                         data.Item2.SetPosition(0, data.Item3.position);
                         data.Item2.SetPosition(1, new Vector3(data.Item3.position.x, 0, data.Item3.position.z));
 
-                        if (!isRuledLineEnable)
+                        if (!isRuledLineEnable || !isSelectMode)
                         {
                             data.Item4.Dispose();
                         }
