@@ -16,6 +16,8 @@ public class SelectMode : MonoBehaviour
     int ADJUST_VALUE_MIN = 1;
     [SerializeField] TrajectoryColor trajectoryColor;
     [SerializeField] GameObject replayBall;
+    [SerializeField] Material ruledLineMat;
+    float RULED_LINE_WIDTH = 0.006f;
 
     public void Initialize()
     {
@@ -120,7 +122,7 @@ public class SelectMode : MonoBehaviour
         if (!trajectoryBalls[0].GetComponent<LineRenderer>())
         {
             trajectoryBalls
-                .Select(transform => Tuple.Create(transform.gameObject, transform.gameObject.AddComponent<LineRenderer>(), transform, new SingleAssignmentDisposable()))
+                .Select(transform => Tuple.Create(transform.gameObject, setLineData(transform.gameObject.AddComponent<LineRenderer>()), transform, new SingleAssignmentDisposable()))
                 .Select(data => data.Item4.Disposable = data.Item1.UpdateAsObservable()
                     .Subscribe(_ =>
                     {
@@ -131,13 +133,28 @@ public class SelectMode : MonoBehaviour
                         if (!isRuledLineEnable || !isSelectMode)
                         {
                             data.Item4.Dispose();
+                            deleteLine();
                         }
                     }))
                 .ToArray();
         }
         else
         {
-            foreach(Transform ball in trajectoryBalls)
+            deleteLine();
+        }
+
+        LineRenderer setLineData(LineRenderer lineRenderer)
+        {
+            lineRenderer.material = ruledLineMat;
+            lineRenderer.startWidth = RULED_LINE_WIDTH;
+            lineRenderer.endWidth = RULED_LINE_WIDTH;
+
+            return lineRenderer;
+        }
+
+        void deleteLine()
+        {
+            foreach (Transform ball in trajectoryBalls)
             {
                 Destroy(ball.GetComponent<LineRenderer>());
             }

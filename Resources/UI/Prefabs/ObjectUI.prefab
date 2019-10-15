@@ -365,6 +365,7 @@ MonoBehaviour:
   trajectoryColor: {fileID: 40928236964264260}
   replayBall: {fileID: 1467655939423550467, guid: 91c07f3749500ce4fb7fdc4bce787ebb,
     type: 3}
+  ruledLineMat: {fileID: 2100000, guid: 658cdf73b4103dc4eb78f0973594658c, type: 2}
 --- !u!114 &40928236964264260
 MonoBehaviour:
   m_ObjectHideFlags: 0
