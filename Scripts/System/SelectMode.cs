@@ -2,6 +2,7 @@
 using UnityEngine;
 using UniRx.Triggers;
 using UniRx;
+using System;
 
 public class SelectMode : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class SelectMode : MonoBehaviour
     float FADE_VALUE = 0.1f;
     float OPAQUE_VALUE = 1.0f;
     bool isSelectMode;
+    bool isRuledLineEnable;
     int replaySpeed;
     int ADJUST_VALUE_MAX = 5;
     int ADJUST_VALUE_MIN = 1;
@@ -107,6 +109,38 @@ public class SelectMode : MonoBehaviour
         if (replaySpeed > ADJUST_VALUE_MAX)
         {
             replaySpeed = ADJUST_VALUE_MAX;
+        }
+    }
+
+    public void WriteRuledLine()
+    {
+        var trajectoryBalls = TrajectoryControl.TrajectoryParents[curretTrajectoryID].GetComponentsInChildren<Transform>();
+        isRuledLineEnable = !isRuledLineEnable;
+
+        if (!trajectoryBalls[0].GetComponent<LineRenderer>())
+        {
+            trajectoryBalls
+                .Select(transform => Tuple.Create(transform.gameObject, transform.gameObject.AddComponent<LineRenderer>(), transform, new SingleAssignmentDisposable()))
+                .Select(data => data.Item4.Disposable = data.Item1.UpdateAsObservable()
+                    .Subscribe(_ =>
+                    {
+                        data.Item2.enabled = true;
+                        data.Item2.SetPosition(0, data.Item3.position);
+                        data.Item2.SetPosition(1, new Vector3(data.Item3.position.x, 0, data.Item3.position.z));
+
+                        if (!isRuledLineEnable)
+                        {
+                            data.Item4.Dispose();
+                        }
+                    }))
+                .ToArray();
+        }
+        else
+        {
+            foreach(Transform ball in trajectoryBalls)
+            {
+                Destroy(ball.GetComponent<LineRenderer>());
+            }
         }
     }
 }
