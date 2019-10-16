@@ -28,19 +28,12 @@ public class Pitching : MonoBehaviour
     {
         var grabbable = GetComponent<OVRGrabbable>();
         trajectory = GetComponent<Trajectory>();
-        switchPlayerMode = GameObject.Find("PlayerModeSwitcherUI").GetComponent<SwitchPlayerModeUI>();
-
 
         //NOTE:ボールをつかんだ瞬間ストックを行うストリーム
         this.UpdateAsObservable()
             .Where(_ => grabbable.isGrabbed && !lastIsGrabbed)
             .Subscribe(_ =>
             {
-                if (switchPlayerMode.CurrentMode == SwitchPlayerModeUI.PlayerMode.Select)
-                {
-                    switchPlayerMode.ChangePlayerMode();
-                }
-
                 gameObject.transform.parent = null;
                 trajectory.Retry();
             });
