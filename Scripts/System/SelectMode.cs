@@ -18,16 +18,17 @@ public class SelectMode : MonoBehaviour
     [SerializeField] GameObject replayBall;
     [SerializeField] Material ruledLineMat;
     float RULED_LINE_WIDTH = 0.006f;
+    bool isPlayingSlowMotion;
 
     public void Initialize()
     {
         this.UpdateAsObservable()
-            .Where(_ => isSelectMode)
+            .Where(_ => isSelectMode && !isPlayingSlowMotion)
             .Where(_ => OVRInput.GetDown(OVRInput.RawButton.RThumbstickUp) || OVRInput.GetDown(OVRInput.RawButton.LThumbstickUp))
             .Subscribe(_ => selectTrajectory(-1));
 
         this.UpdateAsObservable()
-            .Where(_ => isSelectMode)
+            .Where(_ => isSelectMode && !isPlayingSlowMotion)
             .Where(_ => OVRInput.GetDown(OVRInput.RawButton.RThumbstickDown) || OVRInput.GetDown(OVRInput.RawButton.LThumbstickDown))
             .Subscribe(_ => selectTrajectory(1));
 
@@ -71,6 +72,7 @@ public class SelectMode : MonoBehaviour
 
     public void PlaySlowMotion()
     {
+        isPlayingSlowMotion = true;
         var gravity = 9.81f;
         var elapsedTime = 0.0f;
         trajectoryColor.ChangeAlpha(FADE_VALUE, curretTrajectoryID);
@@ -94,6 +96,7 @@ public class SelectMode : MonoBehaviour
 
                 if (instantReplayBall.transform.position.y < 0.0f)
                 {
+                    isPlayingSlowMotion = false;
                     trajectoryColor.ChangeAlpha(OPAQUE_VALUE, curretTrajectoryID);
                     Destroy(instantReplayBall);
                 }
