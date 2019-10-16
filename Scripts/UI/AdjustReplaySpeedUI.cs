@@ -15,10 +15,10 @@ public class AdjustReplaySpeedUI : MonoBehaviour, VRUI
         switch (adjustDirection)
         {
             case AdjustDirection.Up:
-                selectMode.AdjustReplaySpeed(-1);
+                selectMode.AdjustReplaySpeed(1);
                 break;
             case AdjustDirection.Down:
-                selectMode.AdjustReplaySpeed(1);
+                selectMode.AdjustReplaySpeed(-1);
                 break;
         }
     }

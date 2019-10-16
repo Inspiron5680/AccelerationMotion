@@ -11,12 +11,13 @@ public class SelectMode : MonoBehaviour
     float OPAQUE_VALUE = 1.0f;
     bool isSelectMode;
     bool isRuledLineEnable;
-    int replaySpeed;
-    int ADJUST_VALUE_MAX = 5;
-    int ADJUST_VALUE_MIN = 1;
+    float replaySpeed;
+    float ADJUST_VALUE_MAX = 1;
+    float ADJUST_VALUE_MIN = 0.2f;
     [SerializeField] TrajectoryColor trajectoryColor;
     [SerializeField] GameObject replayBall;
     [SerializeField] Material ruledLineMat;
+    [SerializeField] TextMesh rateValue; 
     float RULED_LINE_WIDTH = 0.006f;
     bool isPlayingSlowMotion;
 
@@ -32,7 +33,7 @@ public class SelectMode : MonoBehaviour
             .Where(_ => OVRInput.GetDown(OVRInput.RawButton.RThumbstickDown) || OVRInput.GetDown(OVRInput.RawButton.LThumbstickDown))
             .Subscribe(_ => selectTrajectory(1));
 
-        replaySpeed = 3;
+        AdjustReplaySpeed(2);
     }
 
     public void ChangeSelectMode()
@@ -92,7 +93,7 @@ public class SelectMode : MonoBehaviour
                 var position = new Vector3(coordinateX, coordinateY, coordinateZ);
                 instantReplayBall.transform.localPosition = position;
 
-                elapsedTime += Time.deltaTime / replaySpeed;
+                elapsedTime += Time.deltaTime * replaySpeed;
 
                 if (instantReplayBall.transform.position.y < 0.0f)
                 {
@@ -105,7 +106,7 @@ public class SelectMode : MonoBehaviour
 
     public void AdjustReplaySpeed(int adjustValue)
     {
-        replaySpeed += adjustValue;
+        replaySpeed += 0.2f * adjustValue;
 
         if (replaySpeed < ADJUST_VALUE_MIN)
         {
@@ -116,6 +117,8 @@ public class SelectMode : MonoBehaviour
         {
             replaySpeed = ADJUST_VALUE_MAX;
         }
+
+        rateValue.text = $"× {replaySpeed:F1}";
     }
 
     public void WriteRuledLine()
