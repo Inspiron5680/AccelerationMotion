@@ -26,12 +26,36 @@ public class SelectMode : MonoBehaviour
         this.UpdateAsObservable()
             .Where(_ => isSelectMode && !isPlayingSlowMotion)
             .Where(_ => OVRInput.GetDown(OVRInput.RawButton.RThumbstickUp) || OVRInput.GetDown(OVRInput.RawButton.LThumbstickUp))
-            .Subscribe(_ => selectTrajectory(-1));
+            .Subscribe(_ => 
+            {
+                if (isRuledLineEnable)
+                {
+                    WriteRuledLine();
+                    selectTrajectory(-1);
+
+                }
+                else
+                {
+                    selectTrajectory(-1);
+                }
+            });
 
         this.UpdateAsObservable()
             .Where(_ => isSelectMode && !isPlayingSlowMotion)
             .Where(_ => OVRInput.GetDown(OVRInput.RawButton.RThumbstickDown) || OVRInput.GetDown(OVRInput.RawButton.LThumbstickDown))
-            .Subscribe(_ => selectTrajectory(1));
+            .Subscribe(_ => 
+            {
+                if (isRuledLineEnable)
+                {
+                    WriteRuledLine();
+                    selectTrajectory(1);
+
+                }
+                else
+                {
+                    selectTrajectory(1);
+                }
+            });
 
         AdjustReplaySpeed(2);
     }
@@ -134,19 +158,17 @@ public class SelectMode : MonoBehaviour
                 .Select(data => data.Item3.Disposable = data.Item1.UpdateAsObservable()
                     .Subscribe(_ =>
                     {
-                        writeLine(data, triPoints[1]);
-
                         if (!isRuledLineEnable || !isSelectMode)
                         {
-                            deleteLine();
+                            Destroy(data.Item2);
                             data.Item3.Dispose();
+                        }
+                        else
+                        {
+                            writeLine(data, triPoints[1]);
                         }
                     }))
                 .ToArray();
-        }
-        else
-        {
-            deleteLine();
         }
 
         LineRenderer setLineData(LineRenderer lineRenderer)
@@ -156,14 +178,6 @@ public class SelectMode : MonoBehaviour
             lineRenderer.endWidth = RULED_LINE_WIDTH;
 
             return lineRenderer;
-        }
-
-        void deleteLine()
-        {
-            foreach (Transform ball in trajectoryBalls)
-            {
-                Destroy(ball.GetComponent<LineRenderer>());
-            }
         }
 
         Transform[] getTriPoints()
@@ -178,7 +192,7 @@ public class SelectMode : MonoBehaviour
         }
 
         void writeLine(Tuple<GameObject,LineRenderer,SingleAssignmentDisposable> data,Transform end)
-        {
+        { 
             data.Item2.enabled = true;
             data.Item2.positionCount = 3;
 
