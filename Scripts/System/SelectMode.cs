@@ -36,6 +36,8 @@ public class SelectMode : MonoBehaviour
 
     public void ChangeSelectMode()
     {
+        isSelectMode = !isSelectMode;
+
         if (TrajectoryControl.TrajectoryParents.Count == 0)
         {
             return;
@@ -43,16 +45,15 @@ public class SelectMode : MonoBehaviour
 
         if (isSelectMode)
         {
-            trajectoryColor.ChangeAlpha(OPAQUE_VALUE);
-        }
-        else
-        {
             trajectoryColor.ChangeAlpha(FADE_VALUE);
             trajectoryColor.ChangeAlpha(OPAQUE_VALUE, 0);
             curretTrajectoryID = 0;
+            isRuledLineEnable = false;
         }
-
-        isSelectMode = !isSelectMode;
+        else
+        {
+            trajectoryColor.ChangeAlpha(OPAQUE_VALUE);
+        }
     }
 
     void selectTrajectory(int shiftIndex)
@@ -131,9 +132,8 @@ public class SelectMode : MonoBehaviour
 
                         if (!isRuledLineEnable || !isSelectMode)
                         {
-                            isRuledLineEnable = false;
-                            data.Item3.Dispose();
                             deleteLine();
+                            data.Item3.Dispose();
                         }
                     }))
                 .ToArray();
