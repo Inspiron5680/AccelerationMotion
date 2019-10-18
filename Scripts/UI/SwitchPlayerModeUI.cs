@@ -11,12 +11,17 @@ public class SwitchPlayerModeUI : MonoBehaviour, VRUI
     [SerializeField] GameObject pitchingUI;
     [SerializeField] GameObject selectUI;
     GameObject pitchingBall;
+    [SerializeField] TextMesh textMesh;
+    const string selectModeText = "観察モード";
+    const string throwModeText = "投球モード";
+
 
     public void Initialize()
     {
         pitchingUI.SetActive(true);
         selectUI.SetActive(false);
         CurrentMode = PlayerMode.Pitching;
+        textMesh.text = selectModeText;
     }
 
     public void Receiver()
@@ -39,6 +44,7 @@ public class SwitchPlayerModeUI : MonoBehaviour, VRUI
                 pitchingBall.SetActive(false);
                 selectUI.GetComponent<SelectMode>().ChangeSelectMode();
                 CurrentMode = PlayerMode.Select;
+                textMesh.text = throwModeText;
                 break;
             case PlayerMode.Select:
                 TrajectoryControl.ResetTurnAxis();
@@ -47,6 +53,7 @@ public class SwitchPlayerModeUI : MonoBehaviour, VRUI
                 pitchingBall.SetActive(true);
                 selectUI.GetComponent<SelectMode>().ChangeSelectMode();
                 CurrentMode = PlayerMode.Pitching;
+                textMesh.text = selectModeText;
                 break;
         }
     }
