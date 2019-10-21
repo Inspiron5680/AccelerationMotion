@@ -57,4 +57,9 @@ public class SwitchPlayerModeUI : MonoBehaviour, VRUI
                 break;
         }
     }
+
+    public void Reaction()
+    {
+        throw new System.NotImplementedException();
+    }
 }
