@@ -6,7 +6,7 @@ public class WriteRuledLineUI : MonoBehaviour,VRUI
 
     public void Reaction()
     {
-        throw new System.NotImplementedException();
+        return;
     }
 
     public void Receiver()

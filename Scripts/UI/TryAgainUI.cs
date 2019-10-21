@@ -5,7 +5,7 @@ public class TryAgainUI : MonoBehaviour, VRUI
 {
     public void Reaction()
     {
-        throw new System.NotImplementedException();
+        return;
     }
 
     public void Receiver()

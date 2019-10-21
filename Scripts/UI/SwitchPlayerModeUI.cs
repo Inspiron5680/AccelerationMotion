@@ -60,6 +60,6 @@ public class SwitchPlayerModeUI : MonoBehaviour, VRUI
 
     public void Reaction()
     {
-        throw new System.NotImplementedException();
+        return;
     }
 }
