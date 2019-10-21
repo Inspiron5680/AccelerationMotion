@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class DestroyTrajectoryUI : MonoBehaviour, VRUI
 {
+    public void Reaction()
+    {
+        return;
+    }
+
     public void Receiver()
     {
         if (TrajectoryControl.TrajectoryParents.Count == 0)

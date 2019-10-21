@@ -4,6 +4,11 @@ public class WriteRuledLineUI : MonoBehaviour,VRUI
 {
     [SerializeField] SelectMode selectMode;
 
+    public void Reaction()
+    {
+        return;
+    }
+
     public void Receiver()
     {
         if (!selectMode)

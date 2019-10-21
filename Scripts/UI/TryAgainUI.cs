@@ -3,6 +3,11 @@ using System.Linq;
 
 public class TryAgainUI : MonoBehaviour, VRUI
 {
+    public void Reaction()
+    {
+        return;
+    }
+
     public void Receiver()
     {
         var trajectoryParents = FindObjectsOfType<TrajectoryControl>();

@@ -22,4 +22,9 @@ public class AdjustReplaySpeedUI : MonoBehaviour, VRUI
                 break;
         }
     }
+
+    public void Reaction()
+    {
+        return;
+    }
 }

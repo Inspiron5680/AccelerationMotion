@@ -6,6 +6,11 @@ public class StockTrajectoryUI : MonoBehaviour, VRUI
 {
     public static Trajectory Trajectory { private get; set; }
 
+    public void Reaction()
+    {
+        return;
+    }
+
     public void Receiver()
     {
         if (Trajectory == null)
