@@ -37,6 +37,7 @@ public class Trajectory : MonoBehaviour
         }
         var trajectory = Instantiate(trajectoryBall, ballPosition, Quaternion.identity);
         trajectory.transform.parent = instantTrajectoryParent.transform;
+        trajectory.GetComponent<MeshRenderer>().material.color = BallColor.CurrentballColor;
         lastCreateTime = elapsedTime;
     }
 
@@ -58,6 +59,7 @@ public class Trajectory : MonoBehaviour
         var trajectoryControl = LastTrajectoryData.Item1.GetComponent<TrajectoryControl>();
         trajectoryControl.ThrowVelocity = LastTrajectoryData.Item2;
         trajectoryControl.StockTrajectory();
+        BallColor.ChangeBallColor();
 
         LastTrajectoryData = null;
     }
