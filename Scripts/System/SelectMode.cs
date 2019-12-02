@@ -20,6 +20,7 @@ public class SelectMode : MonoBehaviour
     [SerializeField] TextMesh rateValue; 
     float RULED_LINE_WIDTH = 0.006f;
     bool isPlayingSlowMotion;
+    Color ruledLineColor = Color.black;
 
     public void Initialize()
     {
@@ -201,6 +202,8 @@ public class SelectMode : MonoBehaviour
                 ,new Vector3(end.position.x, data.Item1.transform.position.y, end.position.z)};
 
             data.Item2.SetPositions(positions);
+            data.Item2.startColor = ruledLineColor;
+            data.Item2.endColor = ruledLineColor;
         }
     }
 }
