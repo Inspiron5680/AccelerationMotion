@@ -119,6 +119,7 @@ GameObject:
   - component: {fileID: 40928236143073631}
   - component: {fileID: 40928236143073630}
   - component: {fileID: 2277474562889560883}
+  - component: {fileID: 208704724527374458}
   m_Layer: 0
   m_Name: ObjectUI
   m_TagString: Untagged
@@ -206,6 +207,25 @@ MonoBehaviour:
   selectMode: {fileID: 40928236964264261}
   switchPlayerModeUI: {fileID: 40928237597700241}
   target: {fileID: 0}
+--- !u!95 &208704724527374458
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 40928236143073625}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 090b28de26b471d469895a56c84e38c8, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &40928236742243559
 GameObject:
   m_ObjectHideFlags: 0
@@ -1928,6 +1948,10 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.8
       objectReference: {fileID: 0}
+    - target: {fileID: 2300000, guid: ff931db11d7935a4c8e72c656e618313, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 493d27730f91f0f4dba2d968052502aa, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ff931db11d7935a4c8e72c656e618313, type: 3}
 --- !u!4 &40928237772849757 stripped
