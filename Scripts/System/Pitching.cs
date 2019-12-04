@@ -16,6 +16,13 @@ public class Pitching : MonoBehaviour
     GameObject trajectoryParent;
     SwitchPlayerModeUI switchPlayerMode;
 
+    public enum ThrowMode
+    {
+        Normal, Vartical, Horizontal
+    }
+
+    public ThrowMode Throw { private get; set; } 
+
     void Start()
     {
         Initialize();
@@ -28,6 +35,7 @@ public class Pitching : MonoBehaviour
     {
         var grabbable = GetComponent<OVRGrabbable>();
         trajectory = GetComponent<Trajectory>();
+        Throw = ThrowMode.Normal;
 
         //NOTE:ボールをつかんだ瞬間ストックを行うストリーム
         this.UpdateAsObservable()
@@ -81,9 +89,30 @@ public class Pitching : MonoBehaviour
 
     void throwBall()
     {
-        var coordinateX = throwPosition.x + throwVelocity.x * elapsedTime;
-        var coordinateY = throwPosition.y + throwVelocity.y * elapsedTime - GRAVITY * Mathf.Pow(elapsedTime, 2) / 2;
-        var coordinateZ = throwPosition.z + throwVelocity.z * elapsedTime;
+        float coordinateX = 0;
+        float coordinateY = 0;
+        float coordinateZ = 0;
+
+        switch (Throw)
+        {
+            case ThrowMode.Normal:
+                coordinateX = throwPosition.x + throwVelocity.x * elapsedTime;
+                coordinateY = throwPosition.y + throwVelocity.y * elapsedTime - GRAVITY * Mathf.Pow(elapsedTime, 2) / 2;
+                coordinateZ = throwPosition.z + throwVelocity.z * elapsedTime;
+                break;
+            case ThrowMode.Horizontal:
+                coordinateX = throwPosition.x + throwVelocity.x * elapsedTime;
+                coordinateY = throwPosition.y - GRAVITY * Mathf.Pow(elapsedTime, 2) / 2;
+                coordinateZ = throwPosition.z + throwVelocity.z * elapsedTime;
+                break;
+            case ThrowMode.Vartical:
+                coordinateX = throwPosition.x;
+                coordinateY = throwPosition.y + throwVelocity.y * elapsedTime - GRAVITY * Mathf.Pow(elapsedTime, 2) / 2;
+                coordinateZ = throwPosition.z;
+                break;
+        }
+
+
 
         var position = new Vector3(coordinateX, coordinateY, coordinateZ);
 
