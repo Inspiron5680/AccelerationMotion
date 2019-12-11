@@ -2,6 +2,7 @@
 using UniRx;
 using UniRx.Triggers;
 using System;
+using System.Collections.Generic;
 
 public class Pitching : MonoBehaviour
 {
@@ -15,6 +16,9 @@ public class Pitching : MonoBehaviour
     [SerializeField] GameObject ball;
     GameObject trajectoryParent;
     SwitchPlayerModeUI switchPlayerMode;
+
+    List<Vector3> lastVelocitis = new List<Vector3>();
+    [SerializeField] int velocityLength;
 
     public enum ThrowMode
     {
@@ -35,7 +39,8 @@ public class Pitching : MonoBehaviour
     {
         var grabbable = GetComponent<OVRGrabbable>();
         trajectory = GetComponent<Trajectory>();
-        Throw = ThrowMode.Normal;
+        Throw = (ThrowMode)ThrowModeUI.CurrentMode;
+        Debug.Log(Throw);
 
         //NOTE:ボールをつかんだ瞬間ストックを行うストリーム
         this.UpdateAsObservable()
@@ -54,7 +59,6 @@ public class Pitching : MonoBehaviour
                 {
                     startThrowing();
                 }
-
                 lastIsGrabbed = grabbable.isGrabbed;
             });
 
@@ -76,12 +80,25 @@ public class Pitching : MonoBehaviour
                 respown();
                 Destroy(gameObject);
             });
+
+        var rigidBody = GetComponent<Rigidbody>();
+
+        this.UpdateAsObservable()
+            .Subscribe(_ =>
+            {
+
+                lastVelocitis.Add(rigidBody.velocity);
+
+                if (lastVelocitis.Count > velocityLength)
+                {
+                    lastVelocitis.RemoveAt(0);
+                }
+            });
     }
 
     void startThrowing()
     {
-        var rigidBody = GetComponent<Rigidbody>();
-        throwVelocity = rigidBody.velocity;
+        throwVelocity = lastVelocitis[0];
         throwPosition = gameObject.transform.position;
         trajectoryParent = trajectory.CreateParent(throwPosition);
         doThrow = true;
@@ -125,6 +142,20 @@ public class Pitching : MonoBehaviour
         var instantBall = Instantiate(ball, Vector3.zero, Quaternion.identity);
         instantBall.name = ball.name;
         var trajectoryComponent = instantBall.GetComponent<Trajectory>();
+
+        switch (Throw)
+        {
+            case ThrowMode.Normal:
+                break;
+            case ThrowMode.Horizontal:
+                throwVelocity = new Vector3(throwVelocity.x, 0, throwVelocity.z);
+                break;
+            case ThrowMode.Vartical:
+                throwVelocity = new Vector3(0, throwVelocity.y, 0);
+                break;
+        }
+
+
         trajectoryComponent.LastTrajectoryData = Tuple.Create(trajectoryParent, throwVelocity);
 
         StockTrajectoryUI.Trajectory = trajectoryComponent;

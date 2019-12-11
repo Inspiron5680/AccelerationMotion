@@ -141,6 +141,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ball: {fileID: 341520945837045986}
+  velocityLength: 5
 --- !u!114 &1454927861027922502
 MonoBehaviour:
   m_ObjectHideFlags: 0
