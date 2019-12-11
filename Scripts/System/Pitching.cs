@@ -2,6 +2,7 @@
 using UniRx;
 using UniRx.Triggers;
 using System;
+using System.Collections.Generic;
 
 public class Pitching : MonoBehaviour
 {
@@ -16,6 +17,16 @@ public class Pitching : MonoBehaviour
     GameObject trajectoryParent;
     SwitchPlayerModeUI switchPlayerMode;
 
+    List<Vector3> lastVelocitis = new List<Vector3>();
+    [SerializeField] int velocityLength;
+
+    public enum ThrowMode
+    {
+        Normal, Vartical, Horizontal
+    }
+
+    public ThrowMode Throw { private get; set; } 
+
     void Start()
     {
         Initialize();
@@ -28,6 +39,8 @@ public class Pitching : MonoBehaviour
     {
         var grabbable = GetComponent<OVRGrabbable>();
         trajectory = GetComponent<Trajectory>();
+        Throw = (ThrowMode)ThrowModeUI.CurrentMode;
+        Debug.Log(Throw);
 
         //NOTE:ボールをつかんだ瞬間ストックを行うストリーム
         this.UpdateAsObservable()
@@ -46,7 +59,6 @@ public class Pitching : MonoBehaviour
                 {
                     startThrowing();
                 }
-
                 lastIsGrabbed = grabbable.isGrabbed;
             });
 
@@ -68,12 +80,25 @@ public class Pitching : MonoBehaviour
                 respown();
                 Destroy(gameObject);
             });
+
+        var rigidBody = GetComponent<Rigidbody>();
+
+        this.UpdateAsObservable()
+            .Subscribe(_ =>
+            {
+
+                lastVelocitis.Add(rigidBody.velocity);
+
+                if (lastVelocitis.Count > velocityLength)
+                {
+                    lastVelocitis.RemoveAt(0);
+                }
+            });
     }
 
     void startThrowing()
     {
-        var rigidBody = GetComponent<Rigidbody>();
-        throwVelocity = rigidBody.velocity;
+        throwVelocity = lastVelocitis[0];
         throwPosition = gameObject.transform.position;
         trajectoryParent = trajectory.CreateParent(throwPosition);
         doThrow = true;
@@ -81,9 +106,30 @@ public class Pitching : MonoBehaviour
 
     void throwBall()
     {
-        var coordinateX = throwPosition.x + throwVelocity.x * elapsedTime;
-        var coordinateY = throwPosition.y + throwVelocity.y * elapsedTime - GRAVITY * Mathf.Pow(elapsedTime, 2) / 2;
-        var coordinateZ = throwPosition.z + throwVelocity.z * elapsedTime;
+        float coordinateX = 0;
+        float coordinateY = 0;
+        float coordinateZ = 0;
+
+        switch (Throw)
+        {
+            case ThrowMode.Normal:
+                coordinateX = throwPosition.x + throwVelocity.x * elapsedTime;
+                coordinateY = throwPosition.y + throwVelocity.y * elapsedTime - GRAVITY * Mathf.Pow(elapsedTime, 2) / 2;
+                coordinateZ = throwPosition.z + throwVelocity.z * elapsedTime;
+                break;
+            case ThrowMode.Horizontal:
+                coordinateX = throwPosition.x + throwVelocity.x * elapsedTime;
+                coordinateY = throwPosition.y - GRAVITY * Mathf.Pow(elapsedTime, 2) / 2;
+                coordinateZ = throwPosition.z + throwVelocity.z * elapsedTime;
+                break;
+            case ThrowMode.Vartical:
+                coordinateX = throwPosition.x;
+                coordinateY = throwPosition.y + throwVelocity.y * elapsedTime - GRAVITY * Mathf.Pow(elapsedTime, 2) / 2;
+                coordinateZ = throwPosition.z;
+                break;
+        }
+
+
 
         var position = new Vector3(coordinateX, coordinateY, coordinateZ);
 
@@ -96,6 +142,20 @@ public class Pitching : MonoBehaviour
         var instantBall = Instantiate(ball, Vector3.zero, Quaternion.identity);
         instantBall.name = ball.name;
         var trajectoryComponent = instantBall.GetComponent<Trajectory>();
+
+        switch (Throw)
+        {
+            case ThrowMode.Normal:
+                break;
+            case ThrowMode.Horizontal:
+                throwVelocity = new Vector3(throwVelocity.x, 0, throwVelocity.z);
+                break;
+            case ThrowMode.Vartical:
+                throwVelocity = new Vector3(0, throwVelocity.y, 0);
+                break;
+        }
+
+
         trajectoryComponent.LastTrajectoryData = Tuple.Create(trajectoryParent, throwVelocity);
 
         StockTrajectoryUI.Trajectory = trajectoryComponent;
